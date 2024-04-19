@@ -1,4 +1,5 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
+
 import { auth } from "../firebase";
 
 async function signin(auth, email, password) {
@@ -27,14 +28,15 @@ async function signInUser(data, setIsLoading, messageApi) {
       type: "success",
       content: "Successfully Logged In",
     });
-
     setIsLoading(false);
+    return user;
   } catch (error) {
     messageApi.open({
       type: "error",
       content: error.message,
     });
     setIsLoading(false);
+    return null;
   }
 }
 export default signInUser;

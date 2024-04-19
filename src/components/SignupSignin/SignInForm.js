@@ -1,16 +1,27 @@
 import React, { useState } from "react";
 import { Button, message, Form, Input } from "antd";
+import { useNavigate } from "react-router-dom";
+
 import signInUser from "../../utils/signInUtils";
 
 const SignInForm = ({ setIsSignInTab }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const handleFormSubmit = (data) => {
-    signInUser(data, setIsLoading, messageApi);
+  async function handleFormSubmit(data) {
+    const userData = await signInUser(data, setIsLoading, messageApi);
+    //if signin succes it return userdata
+    //if signin fails it returns null
+    if (userData !== null) {
+      console.log(userData);
+      await delay(1000); //imitating a fake delay of 1second
+      navigate("/dashboard");
+    }
     // form.resetFields(); //reset the form
-  };
+  }
   return (
     <div>
       {contextHolder}

@@ -1,17 +1,24 @@
 import React, { useState } from "react";
 import { Button, message, Form, Input } from "antd";
 import signUpUser from "../../utils/signUpUtils";
+import createDoc from "../../utils/createDocUtils";
 
 const SignUpForm = ({ setIsSignInTab }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleFormSubmit = (data) => {
-    signUpUser(data, setIsLoading, messageApi);
+  async function handleFormSubmit(data) {
+    const userData = await signUpUser(data, setIsLoading, messageApi);
+    //if signin succes it return userdata
+    //if signin fails it returns null
+    if (userData !== null) {
+      console.log(userData);
+      createDoc(userData, data.username, messageApi);
+    }
 
     // form.resetFields(); //reset the form
-  };
+  }
 
   return (
     <div>

@@ -29,12 +29,14 @@ async function signUpUser(data, setIsLoading, messageApi) {
     });
 
     setIsLoading(false);
+    return user;
   } catch (error) {
     messageApi.open({
       type: "error",
       content: error.message,
     });
     setIsLoading(false);
+    return null;
   }
 }
 
