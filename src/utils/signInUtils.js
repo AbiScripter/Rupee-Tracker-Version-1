@@ -26,7 +26,7 @@ async function signInUser(data, setIsLoading, messageApi) {
     console.log(user);
     messageApi.open({
       type: "success",
-      content: "Successfully Logged In",
+      content: "Logging you In...",
     });
     setIsLoading(false);
     return user;

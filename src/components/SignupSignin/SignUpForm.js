@@ -1,12 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, message, Form, Input } from "antd";
 import signUpUser from "../../utils/signUpUtils";
 import createDoc from "../../utils/createDocUtils";
+import googleSignIn from "../../utils/googleSignIn";
 
 const SignUpForm = ({ setIsSignInTab }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   async function handleFormSubmit(data) {
     const userData = await signUpUser(data, setIsLoading, messageApi);
@@ -18,6 +22,14 @@ const SignUpForm = ({ setIsSignInTab }) => {
     }
 
     // form.resetFields(); //reset the form
+  }
+
+  async function handleGoogleSignIn() {
+    const googleData = await googleSignIn(setIsLoading, messageApi);
+    console.log(googleData);
+    createDoc(googleData.user, "random", messageApi);
+    await delay(2000);
+    navigate("/dashboard");
   }
 
   return (
@@ -103,7 +115,14 @@ const SignUpForm = ({ setIsSignInTab }) => {
             SignIn
           </button>
         </p>
-        <Button>Sign Up with Google</Button>
+        <Button
+          type="primary"
+          block
+          onClick={handleGoogleSignIn}
+          loading={isLoading}
+        >
+          Sign Up with Google
+        </Button>
       </Form>
     </div>
   );

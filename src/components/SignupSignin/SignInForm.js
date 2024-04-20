@@ -3,6 +3,8 @@ import { Button, message, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 
 import signInUser from "../../utils/signInUtils";
+import googleSignIn from "../../utils/googleSignIn";
+import createDoc from "../../utils/createDocUtils";
 
 const SignInForm = ({ setIsSignInTab }) => {
   const [form] = Form.useForm();
@@ -22,6 +24,15 @@ const SignInForm = ({ setIsSignInTab }) => {
     }
     // form.resetFields(); //reset the form
   }
+
+  async function handleGoogleSignIn() {
+    const googleData = await googleSignIn(setIsLoading, messageApi);
+    console.log(googleData);
+    createDoc(googleData.user, "random", messageApi);
+    await delay(2000);
+    navigate("/dashboard");
+  }
+
   return (
     <div>
       {contextHolder}
@@ -73,7 +84,14 @@ const SignInForm = ({ setIsSignInTab }) => {
             Sign Up
           </button>
         </p>
-        <Button>Sign In with Google</Button>
+        <Button
+          type="primary"
+          block
+          onClick={handleGoogleSignIn}
+          loading={isLoading}
+        >
+          Sign In with Google
+        </Button>
       </Form>
     </div>
   );
